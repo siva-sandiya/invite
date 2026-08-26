@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Niralya 1st Birthday Invitation</title>
+
+  <!-- Link Preview / Open Graph Meta Tags -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Niralya 1st Birthday Invitation ✨" />
+  <meta property="og:description" content="You are warmly invited to celebrate Niralya's 1st Birthday! Tap to open the invitation." />
+  <meta property="og:image" content="preview.png" />
+
+  <!-- Twitter Card Preview -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Niralya 1st Birthday Invitation ✨" />
+  <meta name="twitter:description" content="You are warmly invited to celebrate Niralya's 1st Birthday! Tap to open the invitation." />
+  <meta name="twitter:image" content="preview.png" />
+
+  <!-- Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: radial-gradient(circle, #ffe4ee 0%, #f48fb1 100%);
+      width: 100vw;
+      height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      touch-action: manipulation;
+      position: relative;
+    }
+
+    /* Ambient Sparkle Effect */
+    .sparkle-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: 
+        radial-gradient(2px 2px at 25px 35px, #fff, rgba(0,0,0,0)),
+        radial-gradient(3px 3px at 50px 75px, #ffd700, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 100px 45px, #fff, rgba(0,0,0,0)),
+        radial-gradient(3px 3px at 170px 130px, #ff69b4, rgba(0,0,0,0));
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      animation: sparkleFloat 5s infinite linear;
+      opacity: 0.75;
+      z-index: 1;
+    }
+
+    @keyframes sparkleFloat {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-200px); }
+    }
+
+    /* Card Wrapper with 3D Depth */
+    .card-wrapper {
+      position: relative;
+      width: min(88vw, 365px);
+      aspect-ratio: 9 / 14;
+      perspective: 1500px;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    /* 1. Zoom Effect: Expands smoothly when opened */
+    .inner-card {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 12px 28px rgba(173, 20, 87, 0.25);
+      transform: scale(0.88);
+      opacity: 0.85;
+      transition: transform 1.2s cubic-bezier(0.2, 0.9, 0.3, 1.2), opacity 0.8s ease, box-shadow 0.9s ease;
+      z-index: 1;
+      background: #fff;
+    }
+
+    .inner-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* 3D Gatefold Doors */
+    .door {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 50%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 5;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .door-left {
+      left: 0;
+      transform-origin: left center;
+      border-radius: 14px 0 0 14px;
+      box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .door-right {
+      right: 0;
+      transform-origin: right center;
+      border-radius: 0 14px 14px 0;
+      box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .door img {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 200%;
+      max-width: none;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+    .door-left img { left: 0; }
+    .door-right img { right: 0; }
+
+    /* Tap Indicator Badge */
+    .tap-btn {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #ffffff, #fff0f5);
+      color: #ad1457;
+      padding: 9px 20px;
+      border-radius: 25px;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.8px;
+      box-shadow: 0 0 15px rgba(255, 105, 180, 0.6), 0 4px 10px rgba(0,0,0,0.2);
+      z-index: 10;
+      pointer-events: none;
+      animation: pulseGlow 1.6s infinite ease-in-out;
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
+      border: 1px solid rgba(255, 215, 0, 0.7);
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: translateX(-50%) scale(1); }
+      50% { transform: translateX(-50%) scale(1.06); }
+    }
+
+    /* Floating Balloons Layer */
+    .balloon-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 8;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .balloon {
+      position: absolute;
+      bottom: -80px;
+      border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+      animation: floatUp linear forwards;
+    }
+
+    .balloon::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 12px;
+      background: rgba(0,0,0,0.2);
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(-110vh) rotate(15deg);
+        opacity: 0;
+      }
+    }
+
+    /* Music Play Indicator Icon */
+    .music-badge {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      z-index: 20;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .music-playing {
+      animation: rotateMusic 3s infinite linear;
+    }
+
+    @keyframes rotateMusic {
+      100% { transform: rotate(360deg); }
+    }
+
+    /* OPEN STATE TRIGGER */
+    .card-wrapper.open .door-left {
+      transform: rotateY(-130deg);
+      pointer-events: none;
+    }
+
+    .card-wrapper.open .door-right {
+      transform: rotateY(130deg);
+      pointer-events: none;
+    }
+
+    .card-wrapper.open .inner-card {
+      transform: scale(1.04);
+      opacity: 1;
+      box-shadow: 0 0 35px rgba(255, 182, 193, 0.9), 0 25px 45px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-wrapper.open .tap-btn {
+      opacity: 0;
+    }
+
+    .card-wrapper.open .balloon-layer {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Audio Element -->
+  <audio id="bgSong" src="song.mp3" preload="auto"></audio>
+
+  <!-- Audio Playing Visual -->
+  <div class="music-badge" id="musicBadge">🎵</div>
+
+  <div class="sparkle-bg"></div>
+
+  <!-- Balloon Layer for floating animation -->
+  <div class="balloon-layer" id="balloonLayer"></div>
+
+  <div class="card-wrapper" id="invitationCard" onclick="toggleCard()">
+    
+    <!-- Full Invitation Card Inside -->
+    <div class="inner-card">
+      <img src="invitation.png" alt="Birthday Invitation" />
+    </div>
+
+    <!-- Left Gate Door -->
+    <div class="door door-left">
+      <img src="reference1.jpg" alt="Cover" />
+    </div>
+
+    <!-- Right Gate Door -->
+    <div class="door door-right">
+      <img src="reference1.jpg" alt="Cover" />
+    </div>
+
+    <!-- Tap Badge -->
+    <div class="tap-btn">TAP TO OPEN ✨</div>
+
+  </div>
+
+  <script>
+    let isOpen = false;
+    const song = document.getElementById('bgSong');
+    const musicBadge = document.getElementById('musicBadge');
+
+    function createBalloons() {
+      const layer = document.getElementById('balloonLayer');
+      layer.innerHTML = '';
+      const colors = [
+        'radial-gradient(circle at 30% 30%, #ff80ab, #c2185b)',
+        'radial-gradient(circle at 30% 30%, #ffd54f, #ff8f00)',
+        'radial-gradient(circle at 30% 30%, #ff4081, #ad1457)',
+        'radial-gradient(circle at 30% 30%, #ffffff, #f48fb1)',
+        'radial-gradient(circle at 30% 30%, #ea80fc, #8e24aa)'
+      ];
+
+      for (let i = 0; i < 14; i++) {
+        const balloon = document.createElement('div');
+        balloon.className = 'balloon';
+        const size = Math.random() * 22 + 28;
+        balloon.style.width = size + 'px';
+        balloon.style.height = (size * 1.25) + 'px';
+        balloon.style.background = colors[Math.floor(Math.random() * colors.length)];
+        balloon.style.left = (Math.random() * 92) + 'vw';
+        balloon.style.animationDuration = (Math.random() * 3 + 4) + 's';
+        balloon.style.animationDelay = (Math.random() * 1.5) + 's';
+        layer.appendChild(balloon);
+      }
+    }
+
+    function toggleCard() {
+      const card = document.getElementById('invitationCard');
+      isOpen = !isOpen;
+      card.classList.toggle('open');
+
+      if (isOpen) {
+        // 1. Play Background Song smoothly
+        song.play().then(() => {
+          musicBadge.style.opacity = '1';
+          musicBadge.classList.add('music-playing');
+        }).catch(err => {
+          console.log("Audio autoplay restriction: ", err);
+        });
+
+        // 2. Trigger Floating Balloons
+        createBalloons();
+
+        // 3. Trigger Confetti Blast
+        setTimeout(() => {
+          confetti({
+            particleCount: 80,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#ff69b4', '#ffd700', '#ffffff', '#ff1493', '#f06292']
+          });
+        }, 400);
+      } else {
+        // Pause song if closed back
+        song.pause();
+        musicBadge.style.opacity = '0';
+        musicBadge.classList.remove('music-playing');
+      }
+    }
+  </script>
+
+</body>
+</html>
